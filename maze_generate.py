@@ -27,6 +27,16 @@ class MazeGenerate:
             mazz.append(lis)
         return mazz
 
+    def where_to_go(self):
+        pass
+
+    def remove_walls(self):
+        pass
+
+
+
+
+
 def PrintMaze(maz):
     for row in maz.maze:
         for cel in row:
