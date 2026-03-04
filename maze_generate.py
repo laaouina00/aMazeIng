@@ -27,8 +27,21 @@ class MazeGenerate:
             mazz.append(lis)
         return mazz
 
-    def where_to_go(self):
-        pass
+    def where_to_go(self, cell):
+
+        neighbors = []
+        row = cell.row
+        col = cell.col
+        if row > 0:
+            neighbors.append(self.maze[row - 1][col])
+        if row < self.height - 1:
+            neighbors.append(self.maze[row + 1][col])
+        if col > 0:
+            neighbors.append(self.maze[row][col - 1])
+        if col < self.width - 1:
+            neighbors.append(self.maze[row][col + 1])
+
+        return neighbors
 
     def remove_walls(self):
         pass
