@@ -34,22 +34,26 @@ class MazeGenerate:
         center_row = self.height // 2
         center_col = self.width // 2
         start_row = center_row - 3
-        start_col = center_col - 6
-        for i in range(5):
+        start_col = center_col - 3
+        for i in range(3):
             self.maze[start_row + i][start_col].blocked = True
         for i in range(3):
-            self.maze[start_row + i][start_col + 2].blocked = True
+            self.maze[start_row + 2][start_col + i].blocked = True
+        for j in range(3):
+            self.maze[start_row + 2 + j][start_col + 2].blocked = True
+        start_col += 3
+        for j in range(3):
+            self.maze[start_row][start_col + j].blocked = True
+        for j in range(3):
+            self.maze[start_row][start_col + j].blocked = True
+        for j in range(3):
+            self.maze[start_row + j][start_col + 2].blocked = True
         for j in range(3):
             self.maze[start_row + 2][start_col + j].blocked = True
-        start_col = center_col + 2
-        for j in range(4):
-            self.maze[start_row][start_col + j].blocked = True
-        self.maze[start_row + 1][start_col + 3].blocked = True
-        for j in range(4):
-            self.maze[start_row + 2][start_col + j].blocked = True
-        self.maze[start_row + 3][start_col].blocked = True
-        for j in range(4):
+        for j in range(3):
             self.maze[start_row + 4][start_col + j].blocked = True
+        for j in range(3):
+            self.maze[start_row + 2 + j][start_col].blocked = True
     
     def where_to_go(self, cell):
 
@@ -72,7 +76,7 @@ class MazeGenerate:
         random.seed(Seed)
         start_row = random.randrange(0, self.height)
         start_col = random.randrange(0, self.width)
-        current_cell = self.maze[start_row][start_col]
+        current_cell = self.maze[0][0]
         current_cell.visited = True
         stack = [current_cell]
         while stack:
