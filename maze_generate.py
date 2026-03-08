@@ -1,20 +1,34 @@
 import random
 import curses
 import time
-
-class Cell:
-    def __init__(self, row, col):
-        self.row = row
-        self.col = col
-        self.top = True
-        self.right = True
-        self.down = True
-        self.left = True
-        self.blocked = False
-        self.visited = False
+from collections import deque
+# class Cell:
+#     def __init__(self, row, col):
+#         self.row = row
+#         self.col = col
+#         self.top = True
+#         self.right = True
+#         self.down = True
+#         self.left = True
+#         self.blocked = False
+#         self.visited = False
+#         self.solution = False
 
 
 class MazeGenerate:
+
+    class Cell:
+        def __init__(self, row, col):
+            self.row = row
+            self.col = col
+            self.top = True
+            self.right = True
+            self.down = True
+            self.left = True
+            self.blocked = False
+            self.visited = False
+            self.solution = False
+
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -25,7 +39,7 @@ class MazeGenerate:
         for row in range(self.height):
             lis = []
             for coll in range(self.width):
-                cel = Cell(row, coll)
+                cel = self.Cell(row, coll)
                 lis.append(cel)
             mazz.append(lis)
         return mazz
@@ -41,7 +55,7 @@ class MazeGenerate:
             self.maze[start_row + 2][start_col + i].blocked = True
         for j in range(3):
             self.maze[start_row + 2 + j][start_col + 2].blocked = True
-        start_col += 3
+        start_col += 4
         for j in range(3):
             self.maze[start_row][start_col + j].blocked = True
         for j in range(3):
@@ -54,9 +68,8 @@ class MazeGenerate:
             self.maze[start_row + 4][start_col + j].blocked = True
         for j in range(3):
             self.maze[start_row + 2 + j][start_col].blocked = True
-    
-    def where_to_go(self, cell):
 
+    def where_to_go(self, cell):
         neighbors = []
         row = cell.row
         col = cell.col
@@ -68,7 +81,6 @@ class MazeGenerate:
             neighbors.append(self.maze[row][col - 1])
         if col < self.width - 1 and not cell.blocked:
             neighbors.append(self.maze[row][col + 1])
-
         return neighbors
 
     def remove_walls(self, Seed):
@@ -101,8 +113,30 @@ class MazeGenerate:
                 stack.append(next_cell)
             else:
                 stack.pop()
-        
 
+
+    def bfs(self, grid, start, end):
+        path = []
+        q = deque()
+        q.append(start)
+        root = {start:None}
+        visited = []
+        visited.add(start)
+        current = start
+        while len(q) > 0:
+            current = q.popleft()
+            neighbor = self.where_to_go(current)
+            if current == end:
+                for r in path:
+                    r.solution = True
+                path.reverse()
+                return path
+            for n in neighbor:
+                if n not in visited:
+                    visited.add(n)
+                    q.append(n)
+                    path.append(n)
+                    root[n] = current
 
 
 def build_maze_array(maz):
@@ -124,23 +158,38 @@ def build_maze_array(maz):
     return maze_array
 
 
+def print_maze_curses(maz, maze_array):
 
-def print_maze_curses(maze_array):
     def draw(stdscr):
         curses.curs_set(0)
         curses.start_color()
+
         curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-        curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_BLACK)
         curses.init_pair(3, curses.COLOR_RED, curses.COLOR_BLACK)
+
         for r, row in enumerate(maze_array):
             for c, val in enumerate(row):
+
                 if val == 1:
                     stdscr.addstr(r, c, "█", curses.color_pair(1))
-                elif val == 0:
-                    stdscr.addstr(r, c, " ", curses.color_pair(2))
-                # time.sleep(0.001)
+
+                else:
+                    if r % 2 == 1 and c % 2 == 1:
+                        cell_r = (r - 1) // 2
+                        cell_c = (c - 1) // 2
+                        cell = maz.maze[cell_r][cell_c]
+
+                        if cell.blocked:
+                            stdscr.addstr(r, c, " ", curses.color_pair(3) | curses.A_REVERSE)
+                        else:
+                            stdscr.addstr(r, c, " ", curses.color_pair(2))
+                    else:
+                        stdscr.addstr(r, c, " ", curses.color_pair(2))
+
         stdscr.refresh()
         stdscr.getch()
+
     curses.wrapper(draw)
 
 
@@ -149,4 +198,4 @@ Seed = None
 maze.draw_42()
 maze.remove_walls(Seed)
 maze_array = build_maze_array(maze)
-print_maze_curses(maze_array)
+print_maze_curses(maze, maze_array)
