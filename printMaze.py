@@ -30,11 +30,11 @@ def print_maze_curses(maz, maze_array):
         curses.curs_set(0)
         curses.start_color()
         curses.use_default_colors()
-        curses.init_pair(1, curses.COLOR_WHITE,   curses.COLOR_BLACK)   # walls
+        curses.init_pair(1, curses.COLOR_YELLOW,  curses.COLOR_YELLOW)  # walls
         curses.init_pair(2, curses.COLOR_BLACK,   curses.COLOR_BLACK)   # empty
         curses.init_pair(3, curses.COLOR_RED,     curses.COLOR_RED)     # blocked (42)
-        curses.init_pair(4, curses.COLOR_YELLOW,  curses.COLOR_YELLOW)  # solution
-        curses.init_pair(5, curses.COLOR_GREEN,   curses.COLOR_GREEN)   # solution corridor
+        curses.init_pair(4, curses.COLOR_BLUE,    curses.COLOR_BLUE)    # solution cell
+        curses.init_pair(5, curses.COLOR_BLUE,    curses.COLOR_BLUE)    # solution corridor
         curses.init_pair(6, curses.COLOR_MAGENTA, curses.COLOR_MAGENTA) # start
         curses.init_pair(7, curses.COLOR_CYAN,    curses.COLOR_CYAN)    # end
 
