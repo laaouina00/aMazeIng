@@ -1,6 +1,16 @@
-def write_output(maze, path, entry,exit_, filepath):
+from typing import List, Tuple
+from maze_generate import MazeGenerator
 
-    directions = []
+
+def write_output(
+    maze: MazeGenerator,
+    path: List['MazeGenerator.Cell'],
+    entry: Tuple[int, int],
+    exit_: Tuple[int, int],
+    filepath: str,
+) -> None:
+
+    directions: List[str] = []
     for i in range(len(path) - 1):
         curr = path[i]
         nxt = path[i + 1]
@@ -18,10 +28,14 @@ def write_output(maze, path, entry,exit_, filepath):
             line = ""
             for cell in row:
                 val = 0
-                if cell.top:   val |= 1
-                if cell.right: val |= 2
-                if cell.down:  val |= 4
-                if cell.left:  val |= 8
+                if cell.top:
+                    val |= 1
+                if cell.right:
+                    val |= 2
+                if cell.down:
+                    val |= 4
+                if cell.left:
+                    val |= 8
                 line += format(val, 'X')
             f.write(line + "\n")
 
